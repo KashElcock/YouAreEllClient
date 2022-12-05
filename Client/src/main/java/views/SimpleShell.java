@@ -9,20 +9,23 @@ import java.util.List;
 
 import controllers.IdController;
 import controllers.MessageController;
+import controllers.TransactionController;
 import youareell.YouAreEll;
 
 // Simple Shell is a Console view for youareell.YouAreEll.
 public class SimpleShell {
 
 
-    public static void prettyPrint(String output) {
-        // yep, make an effort to format things nicely, eh?
-        System.out.println(output);
+    public static <E> void prettyPrint(List<E> objectList) {
+        for (E element : objectList) {
+            System.out.println(element.toString());
+        }
     }
     public static void main(String[] args) throws java.io.IOException {
 
-        YouAreEll urll = new YouAreEll(new MessageController(), new IdController());
-        
+        MessageController msgCtrl = new MessageController();
+        IdController idCtrl = new IdController();
+
         String commandLine;
         BufferedReader console = new BufferedReader
                 (new InputStreamReader(System.in));
@@ -68,15 +71,13 @@ public class SimpleShell {
 
                 // ids
                 if (list.contains("ids")) {
-                    String results = webber.get_ids();
-                    SimpleShell.prettyPrint(results);
+                    SimpleShell.prettyPrint(idCtrl.getIds());
                     continue;
                 }
 
                 // messages
                 if (list.contains("messages")) {
-                    String results = webber.get_messages();
-                    SimpleShell.prettyPrint(results);
+                    SimpleShell.prettyPrint(msgCtrl.getMessages());
                     continue;
                 }
                 // you need to add a bunch more.
@@ -95,18 +96,17 @@ public class SimpleShell {
                 }
 
                 // // wait, wait, what curiousness is this?
-                // Process process = pb.start();
+                 Process process = pb.start();
 
                 // //obtain the input stream
-                // InputStream is = process.getInputStream();
-                // InputStreamReader isr = new InputStreamReader(is);
-                // BufferedReader br = new BufferedReader(isr);
+                 InputStream is = process.getInputStream();
+                 InputStreamReader isr = new InputStreamReader(is);
+                 BufferedReader br = new BufferedReader(isr);
 
                 // //read output of the process
-                // String line;
-                // while ((line = br.readLine()) != null)
-                //     System.out.println(line);
-                // br.close();
+                 String line;
+                 while ((line = br.readLine()) != null) System.out.println(line);
+                 br.close();
 
 
             }
